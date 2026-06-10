@@ -1,0 +1,1601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Precision Farming: Crop Yield Optimisation</title>
+    
+    <!-- Modern Google Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #06100c 0%, #0d281a 50%, #09130f 100%);
+            --primary: #10b981;
+            --primary-glow: rgba(16, 185, 129, 0.35);
+            --accent: #fbbf24;
+            --accent-glow: rgba(251, 191, 36, 0.2);
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --card-border: rgba(255, 255, 255, 0.06);
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --input-bg: rgba(255, 255, 255, 0.04);
+            --input-border: rgba(255, 255, 255, 0.1);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 2rem 1.5rem;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        /* ──────────────────────────────────────────────
+         HEADER & HERO
+         ────────────────────────────────────────────── */
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(12px);
+            padding: 1.5rem 2rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #10b981, #047857);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+
+        .logo-icon svg {
+            fill: #fff;
+            width: 24px;
+            height: 24px;
+        }
+
+        .title-group h1 {
+            font-size: 1.6rem;
+            letter-spacing: -0.5px;
+            background: linear-gradient(120deg, #fff 40%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .title-group p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .badge {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.05);
+        }
+
+        /* ──────────────────────────────────────────────
+         MAIN NAVIGATION TABS (GLOBAL)
+         ────────────────────────────────────────────── */
+        .global-tabs {
+            display: flex;
+            gap: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--card-border);
+            padding: 0.5rem;
+            border-radius: 16px;
+        }
+
+        .global-tab-btn {
+            background: none;
+            border: none;
+            flex: 1;
+            padding: 1rem;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-radius: 12px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .global-tab-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        .global-tab-btn:hover {
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .global-tab-btn.active {
+            color: #fff;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            box-shadow: 0 4px 15px var(--primary-glow);
+        }
+
+        /* Global Tab Content Sections */
+        .global-content {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .global-content.active {
+            display: block;
+        }
+
+        /* ──────────────────────────────────────────────
+         MAIN CONTENT GRID (TAB 1)
+         ────────────────────────────────────────────── */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1.3fr 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 1024px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .glass-panel {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(16px);
+            border-radius: 24px;
+            padding: 2.2rem;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+            transition: var(--transition);
+            margin-bottom: 2rem;
+        }
+
+        .glass-panel:hover {
+            border-color: rgba(16, 185, 129, 0.15);
+            box-shadow: 0 8px 32px 0 rgba(16, 185, 129, 0.03);
+        }
+
+        .panel-title {
+            font-size: 1.3rem;
+            margin-bottom: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 0.75rem;
+        }
+
+        .panel-title svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--primary);
+        }
+
+        /* ──────────────────────────────────────────────
+         PREDICTION FORM
+         ────────────────────────────────────────────── */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 640px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-section-title {
+            grid-column: 1 / -1;
+            font-size: 1rem;
+            color: var(--primary);
+            margin-top: 1rem;
+            margin-bottom: 0.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
+
+        .form-section-title:first-of-type {
+            margin-top: 0;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .input-group label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .input-control {
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 12px;
+            padding: 0.9rem 1.1rem;
+            font-family: inherit;
+            font-size: 0.95rem;
+            color: var(--text-main);
+            transition: var(--transition);
+            width: 100%;
+        }
+
+        .input-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 10px var(--primary-glow);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        select.input-control {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2310b981' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1.1rem center;
+            background-size: 1.1rem;
+            padding-right: 2.5rem;
+        }
+
+        /* Crop Details Lookup Card */
+        .soil-card {
+            grid-column: 1 / -1;
+            background: rgba(16, 185, 129, 0.04);
+            border: 1px dashed rgba(16, 185, 129, 0.2);
+            border-radius: 16px;
+            padding: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        .soil-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .soil-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+
+        .soil-item {
+            background: rgba(255, 255, 255, 0.015);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            padding: 0.6rem;
+            text-align: center;
+        }
+
+        .soil-item-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .soil-item-val {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-top: 2px;
+            color: var(--text-main);
+        }
+
+        .btn-submit {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border: none;
+            border-radius: 14px;
+            color: #fff;
+            padding: 1.1rem;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 15px var(--primary-glow);
+            transition: var(--transition);
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 100%;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        /* ──────────────────────────────────────────────
+         RESULTS PANEL
+         ────────────────────────────────────────────── */
+        .results-panel {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            min-height: 400px;
+        }
+
+        .result-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.2rem;
+            color: var(--text-muted);
+        }
+
+        .result-placeholder svg {
+            width: 80px;
+            height: 80px;
+            fill: rgba(16, 185, 129, 0.15);
+        }
+
+        .result-content {
+            width: 100%;
+            display: none;
+            flex-direction: column;
+            gap: 1.8rem;
+            animation: scaleUp 0.4s ease-out;
+        }
+
+        /* Ring yield metric */
+        .yield-circle {
+            position: relative;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #0c2619 60%, transparent 100%);
+            border: 4px solid var(--card-border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 30px var(--primary-glow);
+            margin: 0 auto;
+        }
+
+        .yield-circle::before {
+            content: '';
+            position: absolute;
+            top: -6px; left: -6px; right: -6px; bottom: -6px;
+            border-radius: 50%;
+            border: 2px dashed var(--primary);
+            animation: rotate 20s linear infinite;
+        }
+
+        .yield-val {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .yield-unit {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .est-production-box {
+            background: rgba(255, 255, 255, 0.015);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 1rem 1.5rem;
+            display: inline-flex;
+            flex-direction: column;
+            gap: 4px;
+            max-width: 250px;
+            margin: 0 auto;
+        }
+
+        .est-production-val {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .cluster-result-card {
+            background: rgba(251, 191, 36, 0.03);
+            border: 1px solid var(--accent-glow);
+            border-radius: 20px;
+            padding: 1.5rem;
+            text-align: left;
+        }
+
+        .cluster-badge {
+            display: inline-block;
+            background: var(--accent);
+            color: #0c1c13;
+            padding: 0.3rem 0.8rem;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            margin-bottom: 0.8rem;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .cluster-desc {
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: var(--text-main);
+        }
+
+        /* ──────────────────────────────────────────────
+         TABS FOR ANALYTICS (IN TAB 1)
+         ────────────────────────────────────────────── */
+        .analytics-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .tabs-header {
+            display: flex;
+            gap: 1rem;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 0.5rem;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+            background: rgba(16, 185, 129, 0.08);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .tab-content {
+            display: none;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .tab-content.active {
+            display: grid;
+        }
+
+        .plot-card {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--card-border);
+            border-radius: 18px;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .plot-card h4 {
+            font-size: 0.95rem;
+            color: var(--text-main);
+            padding: 0 4px;
+        }
+
+        .plot-img-container {
+            width: 100%;
+            background: #000;
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            aspect-ratio: 16 / 10;
+        }
+
+        .plot-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: var(--transition);
+        }
+
+        .plot-img-container img:hover {
+            transform: scale(1.03);
+            cursor: zoom-in;
+        }
+
+        /* ──────────────────────────────────────────────
+         CSV UPLOAD & RETRAINING PANEL (TAB 2)
+         ────────────────────────────────────────────── */
+        .upload-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 900px) {
+            .upload-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Drag and Drop Styling */
+        .dropzone-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            margin-bottom: 1rem;
+        }
+
+        .dropzone-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .dropzone {
+            background: rgba(255,255,255,0.01);
+            border: 2px dashed rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            padding: 2.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .dropzone:hover, .dropzone.dragover {
+            background: rgba(16, 185, 129, 0.03);
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.05);
+        }
+
+        .dropzone svg {
+            width: 44px;
+            height: 44px;
+            fill: rgba(16, 185, 129, 0.5);
+            transition: var(--transition);
+        }
+
+        .dropzone:hover svg {
+            fill: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .dropzone p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .file-info {
+            font-size: 0.85rem;
+            color: var(--accent);
+            font-weight: 500;
+            word-break: break-all;
+        }
+
+        .btn-accent {
+            background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+            box-shadow: 0 4px 15px var(--accent-glow);
+        }
+
+        .btn-accent:hover {
+            box-shadow: 0 6px 20px rgba(251, 191, 36, 0.5);
+            background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+        }
+
+        /* Table Styling for Previews */
+        .preview-table-container {
+            margin-top: 1.5rem;
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+            max-height: 250px;
+        }
+
+        .preview-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+            text-align: left;
+        }
+
+        .preview-table th {
+            background: rgba(0, 0, 0, 0.4);
+            color: var(--primary);
+            padding: 0.8rem 1rem;
+            font-weight: 600;
+            border-bottom: 2px solid var(--card-border);
+        }
+
+        .preview-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--card-border);
+            color: var(--text-main);
+            background: rgba(0,0,0,0.1);
+        }
+
+        .preview-table tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .success-box {
+            background: rgba(16, 185, 129, 0.08);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 14px;
+            padding: 1.2rem;
+            margin-top: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .success-box-text {
+            font-size: 0.9rem;
+            color: var(--text-main);
+        }
+
+        .success-box-text strong {
+            color: var(--primary);
+        }
+
+        .btn-download {
+            background: #10b981;
+            color: #fff;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+
+        .btn-download:hover {
+            background: #059669;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+        }
+
+        /* Comparative Metrics Grid */
+        .metrics-comparison {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .metric-card-compare {
+            background: rgba(0,0,0,0.2);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .compare-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .compare-vals {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            margin-top: 2px;
+        }
+
+        .compare-prev {
+            font-size: 1.1rem;
+            text-decoration: line-through;
+            color: var(--text-muted);
+        }
+
+        .compare-new {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        /* ──────────────────────────────────────────────
+         UTILITIES & ANIMATIONS
+         ────────────────────────────────────────────── */
+        .spinner {
+            display: none;
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(16, 185, 129, 0.1);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: rotate 1s linear infinite;
+        }
+
+        .train-spinner-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            padding: 3rem;
+            text-align: center;
+        }
+
+        @keyframes rotate {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes scaleUp {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Modal image zoom */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .modal img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 12px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            object-fit: contain;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1.5rem; right: 2rem;
+            color: #fff;
+            font-size: 2.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <!-- Header -->
+        <header>
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L7.38,18.5C11.5,18.5 15.5,14 17,8M12,2A10,10 0 0,0 2,12C2,14.42 2.85,16.64 4.28,18.39C5.39,15.75 7.08,12.7 10,10C10,10 8.5,12 8,15C11.5,13.5 15,11.5 17,8C18.5,11.5 17,15 15,17C15,17 17,14.5 19,15C21.5,11.5 22,2 22,2C22,2 14.5,2 12,2Z" />
+                    </svg>
+                </div>
+                <div class="title-group">
+                    <h1>Precision Farming Yield Optimiser</h1>
+                    <p>India District-Level Supervised Output Forecasts & Soil Profiling System</p>
+                </div>
+            </div>
+            <div class="badge">Model Status: Active</div>
+        </header>
+
+        <!-- Global Tab Navigation -->
+        <div class="global-tabs">
+            <button id="navDashboard" class="global-tab-btn active" onclick="switchGlobalTab('dashboardView', 'navDashboard')">
+                <svg viewBox="0 0 24 24"><path d="M13,3V9H21V3H13M3,13H11V21H3V13M3,3H11V9H3V3M13,13H21V21H13V13Z" /></svg>
+                Harvest Predictor & Charts
+            </button>
+            <button id="navUpload" class="global-tab-btn" onclick="switchGlobalTab('uploadView', 'navUpload')">
+                <svg viewBox="0 0 24 24"><path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M12,18.08L9.08,15.17L10.5,13.75L12,15.25V10.5H14V15.25L15.5,13.75L16.92,15.17L12,18.08M13,9V3.5L18.5,9H13Z" /></svg>
+                Upload Spreadsheets & Train AI
+            </button>
+        </div>
+
+        <!-- GLOBAL TAB 1: DASHBOARD VIEW -->
+        <div id="dashboardView" class="global-content active">
+            <div class="main-grid">
+                
+                <!-- Inputs Panel -->
+                <div class="glass-panel">
+                    <h2 class="panel-title">
+                        <svg viewBox="0 0 24 24"><path d="M12,6A6,6 0 0,1 18,12C18,14.22 16.79,16.16 15,17.2V19A1,1 0 0,1 14,20H10A1,1 0 0,1 9,19V17.2C7.21,16.16 6,14.22 6,12A6,6 0 0,1 12,6M10,21H14A1,1 0 0,1 15,22H9A1,1 0 0,1 10,21M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4Z" /></svg>
+                        Step 1: Enter Farm Details
+                    </h2>
+                    
+                    <form id="predictionForm" class="form-grid">
+                        <div class="form-section-title">Location & Crop Type</div>
+                        
+                        <div class="input-group">
+                            <label for="cropSelect">Select Crop</label>
+                            <select id="cropSelect" class="input-control" required>
+                                <option value="" disabled selected>Select Crop</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="seasonSelect">Crop Season</label>
+                            <select id="seasonSelect" class="input-control" required>
+                                <option value="" disabled selected>Select Season</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="stateSelect">State</label>
+                            <select id="stateSelect" class="input-control" required>
+                                <option value="" disabled selected>Select State</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="areaInput">Farming Area Size (in Hectares)</label>
+                            <input type="number" id="areaInput" class="input-control" min="0.1" step="any" placeholder="e.g. 5000" required>
+                        </div>
+
+                        <!-- Crop Soil Lookup Table -->
+                        <div id="soilCard" class="soil-card" style="display: none;">
+                            <div class="soil-card-header">
+                                <span>TYPICAL SOIL HEALTH FOR THIS CROP</span>
+                                <span id="soilClusterLabel" style="color: var(--accent);">Soil Group Type: -</span>
+                            </div>
+                            <div class="soil-grid">
+                                <div class="soil-item">
+                                    <div class="soil-item-label">Nitrogen (N)</div>
+                                    <div id="soilN" class="soil-item-val">-</div>
+                                </div>
+                                <div class="soil-item">
+                                    <div class="soil-item-label">Phosphorus (P)</div>
+                                    <div id="soilP" class="soil-item-val">-</div>
+                                </div>
+                                <div class="soil-item">
+                                    <div class="soil-item-label">Potassium (K)</div>
+                                    <div id="soilK" class="soil-item-val">-</div>
+                                </div>
+                                <div class="soil-item">
+                                    <div class="soil-item-label">Soil pH</div>
+                                    <div id="soilPh" class="soil-item-val">-</div>
+                                </div>
+                                <div class="soil-item">
+                                    <div class="soil-item-label">Average Temp</div>
+                                    <div id="soilTemp" class="soil-item-val">-</div>
+                                </div>
+                                <div class="soil-item">
+                                    <div class="soil-item-label">Humidity</div>
+                                    <div id="soilHumid" class="soil-item-val">-</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section-title">Weather & Resources Used</div>
+
+                        <div class="input-group">
+                            <label for="rainfallInput">Yearly Rainfall (in millimeters)</label>
+                            <input type="number" id="rainfallInput" class="input-control" min="0" step="any" placeholder="e.g. 1200" required>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="fertilizerInput">Total Fertilizer Used (in kilograms)</label>
+                            <input type="number" id="fertilizerInput" class="input-control" min="0" step="any" placeholder="e.g. 50000" required>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="pesticideInput">Total Pesticide Used (in kilograms)</label>
+                            <input type="number" id="pesticideInput" class="input-control" min="0" step="any" placeholder="e.g. 250" required>
+                        </div>
+
+                        <button type="submit" class="btn-submit">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                            Calculate Predicted Harvest
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Results Panel -->
+                <div class="glass-panel results-panel">
+                    <h2 class="panel-title" style="width: 100%;">
+                        <svg viewBox="0 0 24 24"><path d="M19,3H5C3.89,3 3,3.89 3,5V19C3,20.11 3.89,21 5,21H19C20.11,21 21,20.11 21,19V5C21,3.89 20.11,3 19,3M19,19H5V5H19V19M11,7H13V9H11V7M11,11H13V17H11V11Z" /></svg>
+                        Step 2: AI Harvest Prediction
+                    </h2>
+                    
+                    <div id="resultPlaceholder" class="result-placeholder">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M2,21H22V19H2V21M20,8H17V5H15V8H12V10H15V13H17V10H20V8M9,17A3,3 0 0,0 12,14A3,3 0 0,0 9,11A3,3 0 0,0 6,14A3,3 0 0,0 9,17M9,9A3,3 0 0,0 12,6A3,3 0 0,0 9,3A3,3 0 0,0 6,6A3,3 0 0,0 9,9Z" />
+                        </svg>
+                        <p>Fill in the farm details on the left, then click "Calculate Predicted Harvest" to see how much crop you can expect.</p>
+                    </div>
+
+                    <div id="spinner" class="spinner"></div>
+
+                    <div id="resultContent" class="result-content">
+                        <div class="yield-circle">
+                            <span class="yield-val" id="predictedYield">-</span>
+                            <span class="yield-unit">Tonnes per Hectare</span>
+                        </div>
+                        <div class="est-production-box">
+                            <span class="soil-item-label">Estimated Total Harvest</span>
+                            <span id="estimatedProduction" class="est-production-val">-</span>
+                            <span style="font-size: 0.7rem; color: var(--text-muted);">Total expected tonnes across your farm area</span>
+                        </div>
+                        <div class="cluster-result-card">
+                            <div id="clusterBadge" class="cluster-badge">Soil Group Description: -</div>
+                            <p id="clusterDescription" class="cluster-desc">-</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics Gallery Tabs -->
+            <div class="glass-panel analytics-section">
+                <h2 class="panel-title">
+                    <svg viewBox="0 0 24 24"><path d="M16,11.78L20.24,4.45L21.97,5.45L16.74,14.5L10.23,10.75L5.46,19H22V21H2V3H4V17.54L9.5,8L16,11.78Z" /></svg>
+                    AI Accuracy & Farm Performance Charts
+                </h2>
+
+                <div class="tabs-header">
+                    <button class="tab-btn active" onclick="openTab(event, 'edaTab')">Crop & Rainfall Trends</button>
+                    <button class="tab-btn" onclick="openTab(event, 'clusteringTab')">Soil Quality Groups</button>
+                    <button class="tab-btn" onclick="openTab(event, 'evaluationTab')">AI Accuracy Check</button>
+                </div>
+
+                <div id="edaTab" class="tab-content active">
+                    <div class="plot-card">
+                        <h4>How Farm Factors Influence Each Other</h4>
+                        <div class="plot-img-container">
+                            <img src="/outputs/figures/eda_correlation_heatmap.png" alt="Correlation Heatmap" onclick="zoomImage(this.src)">
+                        </div>
+                    </div>
+                    <div class="plot-card">
+                        <h4>How Rainfall Affects Harvest Yield</h4>
+                        <div class="plot-img-container">
+                            <img src="/outputs/figures/eda_rainfall_vs_yield.png" alt="Rainfall vs Yield" onclick="zoomImage(this.src)">
+                        </div>
+                    </div>
+                    <div class="plot-card">
+                        <h4>Range of Harvest Yields</h4>
+                        <div class="plot-img-container">
+                            <img src="/outputs/figures/eda_yield_distribution.png" alt="Yield Distribution" onclick="zoomImage(this.src)">
+                        </div>
+                    </div>
+                    <div class="plot-card">
+                        <h4>Number of Farms Planted by Season</h4>
+                        <div class="plot-img-container">
+                            <img src="/outputs/figures/eda_season_distribution.png" alt="Season Distribution" onclick="zoomImage(this.src)">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="clusteringTab" class="tab-content">
+                    <div class="plot-card">
+                        <h4>Deciding the Soil Groupings</h4>
+                        <div class="plot-img-container">
+                            <img src="/outputs/figures/cluster_elbow_silhouette.png" alt="Elbow/Silhouette Plot" onclick="zoomImage(this.src)">
+                        </div>
+                    </div>
+                    <div class="plot-card">
+                        <h4>Visual Soil Group Categories</h4>
+                        <div class="plot-img-container">
+                            <img src="/outputs/figures/cluster_pca_scatter.png" alt="PCA scatter" onclick="zoomImage(this.src)">
+                        </div>
+                    </div>
+                    <div class="plot-card">
+                        <h4>Distribution of Farms in Soil Groups</h4>
+                        <div class="plot-img-container">
+                            <img src="/outputs/figures/cluster_sizes.png" alt="Cluster sizes" onclick="zoomImage(this.src)">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="evaluationTab" class="tab-content">
+                    <div class="plot-card">
+                        <h4>AI Predicted Harvest vs. Actual Harvest</h4>
+                        <div class="plot-img-container">
+                            <img src="/outputs/figures/eval_actual_vs_predicted.png" alt="Actual vs Predicted" onclick="zoomImage(this.src)">
+                        </div>
+                    </div>
+                    <div class="plot-card">
+                        <h4>Which Factors Matter Most for Crop Yield</h4>
+                        <div class="plot-img-container">
+                            <img src="/outputs/figures/viz_feature_importance.png" alt="Feature Importance" onclick="zoomImage(this.src)">
+                        </div>
+                    </div>
+                    <div class="plot-card">
+                        <h4>Average Crop Yields by State & Crop Type</h4>
+                        <div class="plot-img-container">
+                            <img src="/outputs/figures/viz_yield_comparison.png" alt="Grouped yield comparison" onclick="zoomImage(this.src)">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GLOBAL TAB 2: UPLOAD & RETRAINING VIEW -->
+        <div id="uploadView" class="global-content">
+            <div class="upload-grid">
+                
+                <!-- Bulk Prediction Upload Card -->
+                <div class="glass-panel">
+                    <h2 class="panel-title">
+                        <svg viewBox="0 0 24 24"><path d="M4,6H20V18H4V6M14,14H18V16H14V14M14,10H18V12H14V10M6,8H12V16H6V8Z" /></svg>
+                        Bulk Harvest Predictor (Upload File)
+                    </h2>
+                    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.5rem;">
+                        Upload a spreadsheet (.csv file) containing farm details. It must contain these exact column headers: <br>
+                        <strong style="color: var(--primary);">Crop, Season, State, Area, Annual_Rainfall, Fertilizer, Pesticide</strong>
+                    </p>
+
+                    <div class="dropzone-container">
+                        <span class="dropzone-label">Select your spreadsheet file</span>
+                        <div class="dropzone" id="predictDropzone" onclick="document.getElementById('predictFileInput').click()">
+                            <svg viewBox="0 0 24 24"><path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" /></svg>
+                            <p id="predictFileName">Drag & drop your Excel/CSV file here, or click to browse</p>
+                            <input type="file" id="predictFileInput" style="display:none;" accept=".csv" onchange="handleFileSelect(event, 'predictFileName', 'btnPredictUpload')">
+                        </div>
+                    </div>
+
+                    <button id="btnPredictUpload" class="btn-submit" onclick="submitPredictCsv()" disabled>
+                        Calculate Harvest Predictions for All Rows
+                    </button>
+
+                    <!-- Bulk Results -->
+                    <div id="bulkPredictSuccess" class="success-box" style="display:none;">
+                        <div class="success-box-text">
+                            Predictions finished! Calculated harvest for <strong id="predictRowCount">0</strong> farm rows.
+                        </div>
+                        <a id="predictDownloadLink" href="#" class="btn-download">Download Results Spreadsheet</a>
+                    </div>
+
+                    <!-- Preview Table -->
+                    <div id="previewTableContainer" class="preview-table-container" style="display:none;">
+                        <div style="font-size: 0.8rem; font-weight:600; color:var(--text-muted); padding: 0.5rem;">PREVIEW OF EXPECTED HARVESTS (FIRST 5 ROWS):</div>
+                        <table class="preview-table" id="previewTable">
+                            <thead>
+                                <tr id="previewTableHeader"></tr>
+                            </thead>
+                            <tbody id="previewTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Pipeline Retraining Card -->
+                <div class="glass-panel">
+                    <h2 class="panel-title">
+                        <svg viewBox="0 0 24 24"><path d="M12,18A6,6 0 1,0 6,12A6,6 0 0,0 12,18M12,2A10,10 0 1,1 2,12A10,10 0 0,1 12,2Z" /></svg>
+                        Teach the AI with New Data
+                    </h2>
+                    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.5rem;">
+                        Upload fresh spreadsheets to teach the AI model new patterns. The system will double-check the columns before retraining.
+                    </p>
+
+                    <!-- Yield dataset upload -->
+                    <div class="dropzone-container" style="margin-bottom: 1.2rem;">
+                        <span class="dropzone-label">Upload New Historical Yield File (.csv)</span>
+                        <div class="dropzone" id="yieldDropzone" onclick="document.getElementById('yieldFileInput').click()" style="padding: 1.5rem;">
+                            <svg viewBox="0 0 24 24" style="width:32px; height:32px;"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+                            <p id="yieldFileName" style="font-size:0.8rem;">Click to select crop_yield.csv</p>
+                            <input type="file" id="yieldFileInput" style="display:none;" accept=".csv" onchange="handleFileSelect(event, 'yieldFileName', 'btnTrainModel')">
+                        </div>
+                    </div>
+
+                    <!-- Soil dataset upload -->
+                    <div class="dropzone-container" style="margin-bottom: 1.5rem;">
+                        <span class="dropzone-label">Upload New Soil Quality File (.csv)</span>
+                        <div class="dropzone" id="soilDropzone" onclick="document.getElementById('soilFileInput').click()" style="padding: 1.5rem;">
+                            <svg viewBox="0 0 24 24" style="width:32px; height:32px;"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+                            <p id="soilFileName" style="font-size:0.8rem;">Click to select crop_recommendation.csv</p>
+                            <input type="file" id="soilFileInput" style="display:none;" accept=".csv" onchange="handleFileSelect(event, 'soilFileName', 'btnTrainModel')">
+                        </div>
+                    </div>
+
+                    <button id="btnTrainModel" class="btn-submit btn-accent" onclick="submitTrainCsv()" disabled>
+                        Retrain and Update the AI Model
+                    </button>
+
+                    <!-- Train Progress Spinner -->
+                    <div id="trainProgress" class="train-spinner-container">
+                        <div class="spinner" style="display:block; margin: 0 auto;"></div>
+                        <p style="font-size: 0.9rem; color: var(--accent);">Retraining the AI model... <br>(Cleaning data → Grouping soil types → Finding the best AI parameters → Regenerating charts)</p>
+                    </div>
+
+                    <!-- Metrics comparison -->
+                    <div id="trainSuccess" class="success-box" style="display:none; flex-direction:column; align-items:stretch; gap: 1rem;">
+                        <div class="success-box-text">
+                            AI retrained successfully! The live app is now using your updated model.
+                        </div>
+                        <div class="metrics-comparison" id="metricsComparisonGrid"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Image Zoom Modal -->
+    <div id="zoomModal" class="modal">
+        <span class="modal-close" onclick="closeModal()">&times;</span>
+        <img id="modalImg" src="" alt="Zoomed Plot">
+    </div>
+
+    <!-- Frontend Script Logic -->
+    <script>
+        let cropProfiles = {};
+        let activeModelMetrics = {}; // Store metrics to show comparison on retrain
+
+        // Fetch metadata and current metrics on page load
+        async function fetchMetadata() {
+            try {
+                const response = await fetch('/api/metadata');
+                const data = await response.json();
+                
+                cropProfiles = data.crop_profiles;
+
+                // Populate Dropdowns
+                populateDropdown('cropSelect', data.crops);
+                populateDropdown('seasonSelect', data.seasons);
+                populateDropdown('stateSelect', data.states);
+
+                // Set up event listener on crop selection change
+                document.getElementById('cropSelect').addEventListener('change', updateSoilCard);
+            } catch (err) {
+                console.error("Failed to load metadata: ", err);
+                alert("Error connecting to server. Please ensure the Flask app.py is running!");
+            }
+        }
+
+        function populateDropdown(elementId, items) {
+            const dropdown = document.getElementById(elementId);
+            items.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item;
+                option.textContent = item;
+                dropdown.appendChild(option);
+            });
+        }
+
+        // Live Soil Card Display update
+        function updateSoilCard(event) {
+            const cropName = event.target.value;
+            const card = document.getElementById('soilCard');
+            
+            if (cropName && cropProfiles[cropName]) {
+                const profile = cropProfiles[cropName];
+                
+                document.getElementById('soilClusterLabel').textContent = `Soil Cluster: ${profile.Soil_Cluster}`;
+                document.getElementById('soilN').textContent = `${profile.N_mean.toFixed(1)} kg`;
+                document.getElementById('soilP').textContent = `${profile.P_mean.toFixed(1)} kg`;
+                document.getElementById('soilK').textContent = `${profile.K_mean.toFixed(1)} kg`;
+                document.getElementById('soilPh').textContent = profile.ph_mean.toFixed(2);
+                document.getElementById('soilTemp').textContent = `${profile.temperature_mean.toFixed(1)} °C`;
+                document.getElementById('soilHumid').textContent = `${profile.humidity_mean.toFixed(1)} %`;
+                
+                card.style.display = 'flex';
+            } else {
+                card.style.display = 'none';
+            }
+        }
+
+        // Handle Form Submission for Real-Time Predictions
+        document.getElementById('predictionForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const placeholder = document.getElementById('resultPlaceholder');
+            const spinner = document.getElementById('spinner');
+            const content = document.getElementById('resultContent');
+
+            placeholder.style.display = 'none';
+            content.style.display = 'none';
+            spinner.style.display = 'block';
+
+            const payload = {
+                crop: document.getElementById('cropSelect').value,
+                season: document.getElementById('seasonSelect').value,
+                state: document.getElementById('stateSelect').value,
+                area: document.getElementById('areaInput').value,
+                rainfall: document.getElementById('rainfallInput').value,
+                fertilizer: document.getElementById('fertilizerInput').value,
+                pesticide: document.getElementById('pesticideInput').value
+            };
+
+            try {
+                const response = await fetch('/api/predict', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+
+                if (result.error) {
+                    alert("Error: " + result.error);
+                    spinner.style.display = 'none';
+                    placeholder.style.display = 'flex';
+                    return;
+                }
+
+                document.getElementById('predictedYield').textContent = result.predicted_yield.toFixed(3);
+                document.getElementById('estimatedProduction').textContent = result.estimated_production.toLocaleString(undefined, {maximumFractionDigits: 1});
+                document.getElementById('clusterBadge').textContent = `Soil Cluster ${result.soil_cluster} Profiling`;
+                document.getElementById('clusterDescription').textContent = result.cluster_description;
+
+                spinner.style.display = 'none';
+                content.style.display = 'flex';
+
+            } catch (err) {
+                console.error("Prediction failed: ", err);
+                alert("Network error. Please make sure backend app.py is active.");
+                spinner.style.display = 'none';
+                placeholder.style.display = 'flex';
+            }
+        });
+
+        // Tab Switching Logic (Sub-gallery)
+        function openTab(evt, tabName) {
+            const contents = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < contents.length; i++) {
+                contents[i].classList.remove("active");
+            }
+            const buttons = document.getElementsByClassName("tab-btn");
+            for (let i = 0; i < buttons.length; i++) {
+                buttons[i].classList.remove("active");
+            }
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        // Global Navigation Tabs Switching
+        function switchGlobalTab(tabId, navBtnId) {
+            const contents = document.getElementsByClassName("global-content");
+            for(let i=0; i<contents.length; i++) {
+                contents[i].classList.remove("active");
+            }
+            const buttons = document.getElementsByClassName("global-tab-btn");
+            for(let i=0; i<buttons.length; i++) {
+                buttons[i].classList.remove("active");
+            }
+            document.getElementById(tabId).classList.add("active");
+            document.getElementById(navBtnId).classList.add("active");
+        }
+
+        // Image Zoom Modal Functions
+        function zoomImage(src) {
+            const modal = document.getElementById('zoomModal');
+            const modalImg = document.getElementById('modalImg');
+            modal.style.display = "flex";
+            // Add a timestamp cache buster to bypass browser caching when model is retrained
+            modalImg.src = src + "?t=" + new Date().getTime();
+        }
+
+        function closeModal() {
+            document.getElementById('zoomModal').style.display = "none";
+        }
+
+        // File Selection Handlers for Dropzones
+        function handleFileSelect(event, labelId, btnId) {
+            const input = event.target;
+            const label = document.getElementById(labelId);
+            const button = document.getElementById(btnId);
+            
+            if (input.files && input.files.length > 0) {
+                const file = input.files[0];
+                label.innerHTML = `<span class="file-info">Selected: ${file.name} (${(file.size/1024).toFixed(1)} KB)</span>`;
+                button.disabled = false;
+            } else {
+                label.textContent = "Click to browse";
+                button.disabled = true;
+            }
+        }
+
+        // CSV Upload & Batch Prediction Submission
+        async function submitPredictCsv() {
+            const fileInput = document.getElementById('predictFileInput');
+            if (!fileInput.files || fileInput.files.length === 0) return;
+
+            const button = document.getElementById('btnPredictUpload');
+            const successBox = document.getElementById('bulkPredictSuccess');
+            const previewContainer = document.getElementById('previewTableContainer');
+            
+            button.disabled = true;
+            button.textContent = "Processing batch predictions...";
+
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+
+            try {
+                const response = await fetch('/api/upload/predict', {
+                    method: 'POST',
+                    body: formData
+                });
+                const result = await response.json();
+
+                if (result.error) {
+                    alert("Verification error: " + result.error);
+                    button.disabled = false;
+                    button.textContent = "Generate Bulk Predictions";
+                    return;
+                }
+
+                // Render success details
+                document.getElementById('predictRowCount').textContent = result.total_rows;
+                document.getElementById('predictDownloadLink').href = result.download_url;
+                
+                // Render Preview Table
+                renderPreviewTable(result.preview);
+
+                successBox.style.display = 'flex';
+                previewContainer.style.display = 'block';
+                button.disabled = false;
+                button.textContent = "Generate Bulk Predictions";
+
+            } catch (err) {
+                console.error(err);
+                alert("Upload failed. Make sure Flask app.py is running.");
+                button.disabled = false;
+                button.textContent = "Generate Bulk Predictions";
+            }
+        }
+
+        function renderPreviewTable(rows) {
+            const headerRow = document.getElementById('previewTableHeader');
+            const body = document.getElementById('previewTableBody');
+            
+            headerRow.innerHTML = "";
+            body.innerHTML = "";
+
+            if (rows.length === 0) return;
+
+            // Generate headers
+            const keys = Object.keys(rows[0]);
+            keys.forEach(key => {
+                const th = document.createElement('th');
+                th.textContent = key;
+                headerRow.appendChild(th);
+            });
+
+            // Generate rows
+            rows.forEach(row => {
+                const tr = document.createElement('tr');
+                keys.forEach(key => {
+                    const td = document.createElement('td');
+                    td.textContent = row[key];
+                    tr.appendChild(td);
+                });
+                body.appendChild(tr);
+            });
+        }
+
+        // ML Pipeline Retraining Upload
+        async function submitTrainCsv() {
+            const yieldInput = document.getElementById('yieldFileInput');
+            const soilInput = document.getElementById('soilFileInput');
+
+            if ((!yieldInput.files || yieldInput.files.length === 0) && 
+                (!soilInput.files || soilInput.files.length === 0)) {
+                alert("Please select at least one CSV dataset to retrain.");
+                return;
+            }
+
+            const button = document.getElementById('btnTrainModel');
+            const spinner = document.getElementById('trainProgress');
+            const successBox = document.getElementById('trainSuccess');
+            
+            successBox.style.display = 'none';
+            spinner.style.display = 'flex';
+            button.disabled = true;
+
+            const formData = new FormData();
+            if (yieldInput.files.length > 0) {
+                formData.append('yield_file', yieldInput.files[0]);
+            }
+            if (soilInput.files.length > 0) {
+                formData.append('soil_file', soilInput.files[0]);
+            }
+
+            try {
+                const response = await fetch('/api/upload/train', {
+                    method: 'POST',
+                    body: formData
+                });
+                const result = await response.json();
+
+                if (result.error) {
+                    alert("Retraining failed: " + result.error);
+                    spinner.style.display = 'none';
+                    button.disabled = false;
+                    return;
+                }
+
+                // Render comparison metrics card
+                renderMetricsComparison(result.metrics);
+
+                // Reload the metadata dropdowns in case new crops or states were added
+                fetchMetadata();
+
+                // Force refresh analytics plots by querying them again
+                refreshAllPlots();
+
+                spinner.style.display = 'none';
+                successBox.style.display = 'flex';
+                button.disabled = false;
+
+            } catch (err) {
+                console.error(err);
+                alert("Dynamic retraining failed. Make sure Flask app.py server is fully active.");
+                spinner.style.display = 'none';
+                button.disabled = false;
+            }
+        }
+
+        // Force browser to reload new images (avoiding caching)
+        function refreshAllPlots() {
+            const images = document.querySelectorAll('.plot-img-container img');
+            images.forEach(img => {
+                const src = img.getAttribute('src').split('?')[0];
+                img.setAttribute('src', src + "?t=" + new Date().getTime());
+            });
+        }
+
+        function renderMetricsComparison(newMetrics) {
+            const grid = document.getElementById('metricsComparisonGrid');
+            grid.innerHTML = "";
+
+            // Find RandomForest metrics in new metrics array
+            const rfNew = newMetrics.find(m => m.Model === "Random Forest Regressor");
+            if (!rfNew) return;
+
+            // We compare RF R2, RMSE, MAE
+            const metricsList = [
+                { name: "Model Accuracy Score (R²)", key: "R2", prev: activeModelMetrics.R2 || 0.9177, val: rfNew.R2, fmt: v => (v * 100).toFixed(2) + "%" },
+                { name: "Average Error Margin (RMSE)", key: "RMSE", prev: activeModelMetrics.RMSE || 0.4716, val: rfNew.RMSE, fmt: v => v.toFixed(4) + " tonnes/ha" },
+                { name: "Typical Deviation (MAE)", key: "MAE", prev: activeModelMetrics.MAE || 0.2451, val: rfNew.MAE, fmt: v => v.toFixed(4) + " tonnes/ha" },
+                { name: "Percentage Error Margin (MAPE)", key: "MAPE (%)", prev: activeModelMetrics.MAPE || 31.35, val: rfNew["MAPE (%)"], fmt: v => v.toFixed(2) + "%" }
+            ];
+
+            metricsList.forEach(m => {
+                const card = document.createElement('div');
+                card.className = "metric-card-compare";
+                card.innerHTML = `
+                    <span class="compare-label">${m.name}</span>
+                    <div class="compare-vals">
+                        <span class="compare-prev">${m.fmt(m.prev)}</span>
+                        <span class="compare-new" style="color: ${m.val >= m.prev && m.key === 'R2' ? 'var(--primary)' : 'var(--accent)'}">${m.fmt(m.val)}</span>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+
+            // Update local memory metrics
+            activeModelMetrics = {
+                R2: rfNew.R2,
+                RMSE: rfNew.RMSE,
+                MAE: rfNew.MAE,
+                MAPE: rfNew["MAPE (%)"]
+            };
+        }
+
+        // Fetch current active metrics on load
+        async function fetchActiveMetrics() {
+            try {
+                // Read from server outputs if possible
+                const res = await fetch('/outputs/figures/baseline_comparison.csv');
+                if (res.status === 200) {
+                    const text = await res.text();
+                    const lines = text.split('\n');
+                    // Simple CSV parser
+                    const headers = lines[0].split(',');
+                    const rfRow = lines.find(l => l.startsWith("Random Forest Regressor"));
+                    if (rfRow) {
+                        const vals = rfRow.split(',');
+                        activeModelMetrics = {
+                            R2: parseFloat(vals[1]),
+                            RMSE: parseFloat(vals[2]),
+                            MAE: parseFloat(vals[3]),
+                            MAPE: parseFloat(vals[4])
+                        };
+                    }
+                }
+            } catch(e) {
+                console.log("No previous baseline comparison table found, using defaults.", e);
+            }
+        }
+
+        // Initialisation
+        fetchMetadata();
+        fetchActiveMetrics();
+    </script>
+</body>
+</html>

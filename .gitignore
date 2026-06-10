@@ -1,0 +1,26 @@
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# IDE files
+.vscode/
+.idea/
+
+# Local configuration
+.env
+.env.local
+
+# Gemini/Antigravity logs and config (do not share)
+.gemini/
+
+# Large processed data (optional to ignore, but let's keep master datasets in Git if size is small)
+# data/processed/
