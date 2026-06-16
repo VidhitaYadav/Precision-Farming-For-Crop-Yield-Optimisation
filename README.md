@@ -2,7 +2,7 @@
 ### Predicting District-Level Agricultural Output from Soil, Weather, and Irrigation Data Using K-Means Soil Profiling and Random Forest Regression
 
 ---
-Deployed on Render: precision-farming-yield-optimiser.onrender.com (precision-farming-yield-optimiser.onrender.com)  
+Deployed on Render: precision-farming-yield-optimiser.onrender.com
 ## 1. Project Overview
 
 This project implements a complete machine learning system designed to predict district-level agricultural output (crop yield) across India. It integrates historical crop production statistics, soil health parameters, weather conditions, and irrigation indicators using a two-stage analytical pipeline:
